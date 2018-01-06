@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'drawer.dart';
+import 'item.dart';
 
 const double _kFlexibleSpaceMaxHeight = 256.0;
 const String _kGalleryAssetsPackage = 'flutter_gallery_assets';
@@ -60,6 +61,34 @@ class GalleryHomeState extends State<GalleryHome>
     super.dispose();
   }
 
+  List<Widget> _galleryListItems() {
+    final List<Widget> listItems = <Widget>[];
+    final ThemeData themeData = Theme.of(context);
+    final TextStyle headerStyle =
+        themeData.textTheme.body2.copyWith(color: themeData.accentColor);
+    String category;
+    for (GalleryItem galleryItem in kAllGalleryItems) {
+      if (category != galleryItem.category) {
+        if (category != null) listItems.add(const Divider());
+        listItems.add(new MergeSemantics(
+          child: new Container(
+            height: 48.0,
+            padding: const EdgeInsetsDirectional.only(start: 16.0),
+            alignment: AlignmentDirectional.centerStart,
+            child: new SafeArea(
+              top: false,
+              bottom: false,
+              child: new Text(galleryItem.category, style: headerStyle),
+            ),
+          ),
+        ));
+        category = galleryItem.category;
+      }
+      listItems.add(galleryItem);
+    }
+    return listItems;
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget home = new Scaffold(
@@ -86,6 +115,8 @@ class GalleryHomeState extends State<GalleryHome>
                 title: const Text('Gallery'),
               ),
             ),
+            new SliverList(
+                delegate: new SliverChildListDelegate(_galleryListItems())),
           ],
         ));
 

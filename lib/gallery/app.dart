@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 
 import 'home.dart';
+import 'item.dart';
 
 final ThemeData _kGalleryLightTheme = new ThemeData(
   brightness: Brightness.light,
@@ -72,6 +73,14 @@ class GalleryAppState extends State<GalleryApp> {
     );
 
     final Map<String, WidgetBuilder> _kRoutes = <String, WidgetBuilder>{};
+    for (GalleryItem item in kAllGalleryItems) {
+      // For a different example of how to set up an application routing table
+      // using named routes, consider the example in the Navigator class documentation:
+      // https://docs.flutter.io/flutter/widgets/Navigator-class.html
+      _kRoutes[item.routeName] = (BuildContext context) {
+        return item.buildRoute(context);
+      };
+    }
 
     return new MaterialApp(
       title: 'Gallery',
