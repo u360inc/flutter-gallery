@@ -1,0 +1,25 @@
+box:
+  id: michilu/docker-flutter
+  entrypoint: /bin/bash -c
+  cmd: /bin/bash
+build:
+  steps:
+  - script:
+      name: flutter upgrade
+      code: |
+        flutter upgrade
+  - script:
+      name: flutter analyze
+      code: |
+        flutter analyze
+  - script:
+      name: flutter test
+      code: |
+        if [ -d test ]; then flutter test; fi
+  - script:
+      name: flutter drive
+      code: |
+        if [ -d test_driver]; then flutter drive; fi
+  after-steps:
+  - slack-notifier:
+      url: $SLACK_URL
